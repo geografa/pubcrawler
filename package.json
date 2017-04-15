@@ -1,0 +1,25 @@
+{
+  "name": "optimize-trip-api-demo",
+  "version": "1.0.0",
+  "description": "Optimize Trip API Demo",
+  "main": "index.js",
+  "scripts": {
+    "build": "NODE_ENV=production browserify src/index.js | uglifyjs -c -m > bundle.js",
+    "start": "budo src/index.js:bundle.js -p 3000 --live",
+    "test": "eslint src/",
+    "fix": "eslint --fix src/"
+  },
+  "author": "Sarah Kleinman",
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^13.1.0",
+    "budo": "^9.2.1",
+    "eslint": "^3.9.1",
+    "rest": "^2.0.0",
+    "uglify": "^0.1.5"
+  },
+  "dependencies": {
+    "mapbox-gl": "^0.35.1",
+    "xhr": "^2.3.3"
+  }
+}
