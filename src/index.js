@@ -326,7 +326,7 @@ map.on('load', function(){
     },
     "paint": {
       "line-color": green,
-      "line-width": 3,
+      "line-width": 2.5,
     }
   });
   map.addLayer({
@@ -338,8 +338,8 @@ map.on('load', function(){
     },
     "paint": {
       "line-color": green,
-      "line-width": 10,
-      "line-blur": 10
+      "line-width": 12,
+      "line-blur": 8
     }
   });
   map.addSource('trip-stops-box-shadow', {
