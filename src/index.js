@@ -29,7 +29,8 @@ var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/grafa/cj1ir0n8h000a2slhyi1vgih0', //stylesheet location
     center: [-122.67773866653444, 45.52245801087795], // starting position
-    zoom: 16 // starting zoom
+    zoom: 16,
+    pitch: 40 // starting zoom
 });
 
 // Create a Foursquare developer account: https://developer.foursquare.com/
@@ -328,7 +329,7 @@ map.on('load', function(){
       "line-color": green,
       "line-width": 2.5,
     }
-  });
+  },'building');
   map.addLayer({
     "id": "trip-blur",
     "source": "trip-feature",
@@ -341,7 +342,7 @@ map.on('load', function(){
       "line-width": 12,
       "line-blur": 8
     }
-  });
+  },'building');
   map.addSource('trip-stops-box-shadow', {
     "type": "geojson",
     "data": {
