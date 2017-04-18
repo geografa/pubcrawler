@@ -10,7 +10,7 @@ var total_stops = document.getElementById('total-stops'),
   spinner_div = document.getElementById('spinner-div'),
   green = '#23d2be',
   origin,
-  origin_coords = [-122.67773866653444,45.52245801087795],
+  origin_coords = [-122.65671251248602,45.5147175555129],
   stops_coordinates = [],
   counter = 0,
   // Holds mousedown state for events. if this
@@ -27,8 +27,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JhZmEiLCJhIjoiZjk3Mjk2YWYzZTNlYjM3ODdlNzJlO
 
 var map = new mapboxgl.Map({
     container: 'map', // container id
-    style: 'mapbox://styles/grafa/cj1ir0n8h000a2slhyi1vgih0', //stylesheet location
-    center: [-122.67773866653444, 45.52245801087795], // starting position
+    style: 'mapbox://styles/grafa/cj1lk8sbi000a2ro24ctbfxk8', //stylesheet location
+    center: [-122.65696668568467,45.51472381158723], // starting position
     zoom: 16,
     pitch: 40 // starting zoom
 });
@@ -476,4 +476,9 @@ map.on('click', function(e){
       getOptimizedTrip(origin, api_coordinates, updateMapAndSidebar); 
     }    
   }
+});
+
+map.on('mousemove', function (e) {
+    var features = map.queryRenderedFeatures(e.point);
+    document.getElementById('features').innerHTML = JSON.stringify(features, null, 2);
 });
