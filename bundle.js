@@ -37005,7 +37005,7 @@ var total_stops = document.getElementById('total-stops'),
   spinner_div = document.getElementById('spinner-div'),
   green = '#23d2be',
   origin,
-  origin_coords = [-122.67773866653444,45.52245801087795],
+  origin_coords = [-122.68437815301763,45.51174861950116],
   stops_coordinates = [],
   counter = 0,
   // Holds mousedown state for events. if this
@@ -37018,13 +37018,14 @@ var total_stops = document.getElementById('total-stops'),
   trip;
 
 // mapbox.mapbox-traffic-v1
-mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JhZmEiLCJhIjoiZjk3Mjk2YWYzZTNlYjM3ODdlNzJlOWJlM2VjZGI0ZDEifQ.OTT9oT7CqAc9vZsnJLT51Q';
+mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JhZmEiLCJhIjoiY2oxbnJkOHlpMDB2eTJ3a2EyaW8zYTg3NyJ9.KpattAxL6iFzfpxt5rFrVw';
 
 var map = new mapboxgl.Map({
     container: 'map', // container id
-    style: 'mapbox://styles/grafa/cj1ir0n8h000a2slhyi1vgih0', //stylesheet location
-    center: [-122.67773866653444, 45.52245801087795], // starting position
+    style: 'mapbox://styles/grafa/cj1ir0n8h000a2slhyi1vgih0', //pub crawl style
+    center: [-122.68437815301763,45.51174861950116], // starting position
     zoom: 16,
+    bearing: 67,
     pitch: 40 // starting zoom
 });
 
@@ -37471,6 +37472,11 @@ map.on('click', function(e){
       getOptimizedTrip(origin, api_coordinates, updateMapAndSidebar); 
     }    
   }
+});
+
+map.on('mousemove', function (e) {
+    var features = map.queryRenderedFeatures(e.point);
+    document.getElementById('features').innerHTML = JSON.stringify(features, null, 2);
 });
 
 },{"./getOptimizedTrip.js":226,"jquery":24,"mapbox-gl":91}]},{},[227]);
