@@ -33,9 +33,9 @@ var total_stops = document.getElementById('total-stops'),
   total_distance = document.getElementById('total-distance'),
   map_spinner = document.getElementById('map-spinner'),
   spinner_div = document.getElementById('spinner-div'),
-  green = '#23d2be',
+  green = '#04ff00',
   origin,
-  origin_coords = [-122.65673243859806,45.514562957893304],
+  origin_coords = [-122.6576754579404,45.51468575940848],
   stops_coordinates = [],
   counter = 0,
   // Holds mousedown state for events. if this
@@ -52,8 +52,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JhZmEiLCJhIjoiY2oxbnJkOHlpMDB2eTJ3a2EyaW8zY
 
 var map = new mapboxgl.Map({
     container: 'map', // container id
-    style: 'mapbox://styles/grafa/cj1ir0n8h000a2slhyi1vgih0', //pub crawl style
-    center: [-122.65673243859806,45.514562957893304], // starting position
+    style: 'mapbox://styles/grafa/cj1tpfitc001y2so6bci14wug', //DWP Greenloop style
+    center: [-122.6576754579404,45.51468575940848], // starting position
     zoom: 15,
     bearing: -45,
     pitch: 40 // starting zoom
@@ -385,7 +385,7 @@ $('#refresh').click(function() {
     },
     "paint": {
       "line-color": green,
-      "line-width": 2.5,
+      "line-width": 3,
     }
   },'building');
   map.addLayer({
@@ -397,7 +397,7 @@ $('#refresh').click(function() {
     },
     "paint": {
       "line-color": green,
-      "line-width": 12,
+      "line-width": 18,
       "line-blur": 8
     }
   },'building');
@@ -595,7 +595,7 @@ function removePopUp(currentFeature) {
       }
 
       function isInteresting(post) {
-        const tagsInteresting = ['portland', 'pdx', 'dwp', 'designweek'];
+        const tagsInteresting = ['dwp', 'designweek', 'designweekpdx'];
         var interesting = false;
         // console.log(post.tags);
         post.tags.forEach(function(tag) {
@@ -622,6 +622,19 @@ function removePopUp(currentFeature) {
           .addTo(map);
       };
 
+      // function compareStrings(a, b) {
+      //   // Assuming you want case-insensitive comparison
+      //   a = a.toLowerCase();
+      //   b = b.toLowerCase();
+
+      //   return (a < b) ? -1 : (a > b) ? 1 : 0;
+      // }
+
+      // backgroundPosts.features.sort(function(a, b) {
+      //   return compareStrings(a.properties['Location'], b.properties['Location']);
+      // })
+
+
       function addToLayer(post) {
         var point = {
           "type": "Feature",
@@ -631,7 +644,9 @@ function removePopUp(currentFeature) {
             "coordinates": post.lnglat
           }
         };
+        // compareStrings();
         backgroundPosts.features.push(point);
+        // console.log(backgroundPosts.features);
       }
 
       $('.marker').mouseover( function() {
@@ -680,11 +695,6 @@ function removePopUp(currentFeature) {
 
   function success(pos) {
     var crd = pos.coords;
-
-    // console.log('Your current position is:');
-    // console.log(`Latitude : ${crd.latitude}`);
-    // console.log(`Longitude: ${crd.longitude}`);
-    // console.log(`More or less ${crd.accuracy} meters.`);
   };
 
   function error(err) {

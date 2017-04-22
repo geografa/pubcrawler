@@ -4,11 +4,16 @@
   box-sizing:border-box;
 }
 
-  body {
+body {
     background: #545561;
     margin: 0;
     padding: 0;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
   }
+
 .sidebar {
   position:absolute;
   width:25%;
@@ -52,8 +57,12 @@ a:hover {
   border-bottom:1px solid #eee;
   min-height:60px;
   line-height:60px;
-  padding:0 10px;
+  padding:10px 10px;
   color: #fff;
+}
+
+.green-loop {
+  color: #30a841;
 }
 
 .listings {
@@ -227,7 +236,15 @@ a:hover {
 }
 
 #scroll-sidebar{
-  background-color: #30a841;
+  background-color: #545561;
+}
+
+#scroll-sidebar a {
+  color: #aab7ef;
+}
+
+.mapbox-logo {
+  max-width: 85px;
 }
 
 .spinner-center{
@@ -253,25 +270,36 @@ a:hover {
   margin-right: 2px;
 }
 .total-trips {
-  color: #00626e;
+  color: #386333;
   background-color: #fff;
 }
 .color-dark-teal {
-  color: #00626e;
+  color: #177527;
 }
 .color-light-teal{
-  color: #53959d;
+  color: #177527;
 }
 .marker {
   width: 24px;
   height: 24px;
   border-radius: 100%;
-  border-color: #fff;
+  /*border-color: #fff;*/
   line-height: 24px;
   font-weight: 700;
   text-align: center;
-  background-color: #30a841;
-  color: #fff;
+  background-color: rgba(255, 255, 255, 0.78);
+  color: #177527;
+}
+.ig-marker {
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  /*border-color: #fff;*/
+  line-height: 24px;
+  font-weight: 700;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.78);
+  color: #177527;
 }
 
 .sonar-marker {
