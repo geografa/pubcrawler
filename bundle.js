@@ -36993,6 +36993,31 @@ module.exports = function(origin, waypoints, callback) {
 };
 
 },{"../config.js":1,"xhr":224}],227:[function(require,module,exports){
+ // This will let you use the .remove() function later on
+  if (!('remove' in Element.prototype)) {
+    Element.prototype.remove = function() {
+      if (this.parentNode) {
+          this.parentNode.removeChild(this);
+      }
+    };
+  }
+
+  function getQueryVariable(variable) {
+    var query = window.location.hash.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+      if (decodeURIComponent(pair[0]) == variable) {
+        return decodeURIComponent(pair[1]);
+      }
+    }
+    var hash = query.split('/');
+
+    console.log('Query variable %s not found', variable);
+  }
+  var igToken = getQueryVariable('access_token');
+
+
 var mapboxgl = require('mapbox-gl');
 var getOptimizedTrip = require('./getOptimizedTrip.js');
 var $ = require("jquery");
@@ -37003,9 +37028,9 @@ var total_stops = document.getElementById('total-stops'),
   total_distance = document.getElementById('total-distance'),
   map_spinner = document.getElementById('map-spinner'),
   spinner_div = document.getElementById('spinner-div'),
-  green = '#23d2be',
+  green = '#04ff00',
   origin,
-  origin_coords = [-122.68437815301763,45.51174861950116],
+  origin_coords = [-122.6576754579404,45.51468575940848],
   stops_coordinates = [],
   counter = 0,
   // Holds mousedown state for events. if this
@@ -37022,90 +37047,95 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JhZmEiLCJhIjoiY2oxbnJkOHlpMDB2eTJ3a2EyaW8zY
 
 var map = new mapboxgl.Map({
     container: 'map', // container id
-    style: 'mapbox://styles/grafa/cj1ir0n8h000a2slhyi1vgih0', //pub crawl style
-    center: [-122.68437815301763,45.51174861950116], // starting position
-    zoom: 16,
-    bearing: 67,
+    style: 'mapbox://styles/grafa/cj1tpfitc001y2so6bci14wug', //DWP Greenloop style
+    center: [-122.6576754579404,45.51468575940848], // starting position
+    zoom: 15,
+    bearing: -45,
     pitch: 40 // starting zoom
 });
 
-// Create a Foursquare developer account: https://developer.foursquare.com/
-// NOTE: CHANGE THESE VALUES TO YOUR OWN:
-// Otherwise they can be cycled or deactivated with zero notice.
-var CLIENT_ID = 'XNQ0MRVNNZBHZYQ3B2YVVC0KLWG03P1J3W45M1EHLEDU4BIS';
-var CLIENT_SECRET = 'UVMW41TUNZJSRSITT22NVQACYEXTOT4EY0V2O4AA12OWX1A5';
+// if using foursquare  ---------------------------------------
 
-// https://developer.foursquare.com/start/search
-var API_ENDPOINT = 'https://api.foursquare.com/v2/venues/search' +
-'?client_id=CLIENT_ID' +
-'&client_secret=CLIENT_SECRET' +
-'&v=20130815' +
-'&ll=LATLON' +
-'&categoryId=4d4b7105d754a06376d81259' +
-'&limit=50' +
-'&radius=500' +
-'&callback=?';
+// // Create a Foursquare developer account: https://developer.foursquare.com/
+// // NOTE: CHANGE THESE VALUES TO YOUR OWN:
+// // Otherwise they can be cycled or deactivated with zero notice.
+// var CLIENT_ID = 'XNQ0MRVNNZBHZYQ3B2YVVC0KLWG03P1J3W45M1EHLEDU4BIS';
+// var CLIENT_SECRET = 'UVMW41TUNZJSRSITT22NVQACYEXTOT4EY0V2O4AA12OWX1A5';
 
-// Use jQuery to make an AJAX request to Foursquare to load markers data.
-$.getJSON(API_ENDPOINT
-    .replace('CLIENT_ID', CLIENT_ID)
-    .replace('CLIENT_SECRET', CLIENT_SECRET)
-    .replace('LATLON', map.getCenter().lat +
-        ',' + map.getCenter().lng), function(result, status) {
+// // https://developer.foursquare.com/start/search
+// var API_ENDPOINT = 'https://api.foursquare.com/v2/venues/search' +
+// '?client_id=CLIENT_ID' +
+// '&client_secret=CLIENT_SECRET' +
+// '&v=20130815' +
+// '&ll=LATLON' +
+// '&categoryId=4d4b7105d754a06376d81259' +
+// '&limit=50' +
+// '&radius=500' +
+// '&callback=?';
 
-        if (status !== 'success') return alert('Request to Foursquare failed');
+// // Use jQuery to make an AJAX request to Foursquare to load markers data.
+// $.getJSON(API_ENDPOINT
+//     .replace('CLIENT_ID', CLIENT_ID)
+//     .replace('CLIENT_SECRET', CLIENT_SECRET)
+//     .replace('LATLON', map.getCenter().lat +
+//         ',' + map.getCenter().lng), function(result, status) {
 
-    // Transform each venue result into a marker on the map.
-    var pubs = [];
-    for (var i = 0; i < result.response.venues.length; i++) {
-        var venue = result.response.venues[i],
-            lng = parseFloat(venue.location.lng),
-            lat = parseFloat(venue.location.lat);
-        venue.lnglat = [lng,lat];
+//         if (status !== 'success') return alert('Request to Foursquare failed');
 
-        pubs.push({
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": venue.lnglat
-                },
-                "properties": {
-                    "title": venue.name,
-                    "address": venue.location.address
-                }
-            });
-    }
+//     // Transform each venue result into a marker on the map.
+//     var pubs = [];
+//     for (var i = 0; i < result.response.venues.length; i++) {
+//         var venue = result.response.venues[i],
+//             lng = parseFloat(venue.location.lng),
+//             lat = parseFloat(venue.location.lat);
+//         venue.lnglat = [lng,lat];
 
-    map.addSource("markers", {
-        "type": "geojson",
-        "data": {
-            "type": "FeatureCollection",
-            "features": pubs
-        }
-    });
+//         pubs.push({
+//                 "type": "Feature",
+//                 "geometry": {
+//                     "type": "Point",
+//                     "coordinates": venue.lnglat
+//                 },
+//                 "properties": {
+//                     "title": venue.name,
+//                     "address": venue.location.address
+//                 }
+//             });
+//     }
 
-    map.addLayer({
-        "id": "markers",
-        "interactive": true,
-        "type": "symbol",
-        "source": "markers",
-        "paint": {
-            "text-color": "#fff"
-        },
-        "layout": {
-            "icon-image": "beer",
-            "icon-size": 0.5,
-            "icon-allow-overlap": true,
-            "text-field": "{title}",
-            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            "text-offset": [1.5, 0.5],
-            "text-size": 12,
-            "text-anchor": "bottom-left",
-            "text-justify": "left",
-        }
-    });
+//     map.addSource("markers", {
+//         "type": "geojson",
+//         "data": {
+//             "type": "FeatureCollection",
+//             "features": pubs
+//         }
+//     });
 
-});
+//     map.addLayer({
+//         "id": "markers",
+//         "interactive": true,
+//         "type": "symbol",
+//         "source": "markers",
+//         "paint": {
+//             "text-color": "#fff"
+//         },
+//         "layout": {
+//             "icon-image": "beer",
+//             "icon-size": 0.5,
+//             "icon-allow-overlap": true,
+//             "text-field": "{title}",
+//             "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+//             "text-offset": [1.5, 0.5],
+//             "text-size": 12,
+//             "text-anchor": "bottom-left",
+//             "text-justify": "left",
+//         }
+//     });
+
+// });
+
+// ---------------------------------------
+
 
 var canvas = map.getCanvasContainer();
 
@@ -37281,6 +37311,33 @@ var empty_feature = {
 }
 
 map.on('load', function(){
+
+
+// Initialize the list
+buildLocationList(backgroundPosts);
+getInstagrams(-122.67773866653444, 45.52245801087795);
+
+map.addControl(new mapboxgl.NavigationControl());
+
+map.addLayer({
+  'id': 'background-posts',
+  'type': 'symbol',
+  'source': {
+    'type': 'geojson',
+    'data': backgroundPosts
+  },
+  "layout": {
+    "icon-image": "badge-green",
+        // "icon-allow-overlap": true,
+        "icon-size": 0.25
+      }
+    });
+
+$('#refresh').click(function() {
+  var center = map.getCenter();
+  getInstagrams(center.lng, center.lat);
+});
+
  map.addSource('trip-origin-casing',{
     "type": "geojson",
     "data": origin_feature
@@ -37323,7 +37380,7 @@ map.on('load', function(){
     },
     "paint": {
       "line-color": green,
-      "line-width": 2.5,
+      "line-width": 3,
     }
   },'building');
   map.addLayer({
@@ -37335,7 +37392,7 @@ map.on('load', function(){
     },
     "paint": {
       "line-color": green,
-      "line-width": 12,
+      "line-width": 18,
       "line-blur": 8
     }
   },'building');
@@ -37422,6 +37479,226 @@ map.on('load', function(){
   map.on('mousedown', mouseDown, true);
 });
 
+
+function removePopUp(currentFeature) {
+    var popUps = document.getElementsByClassName('mapboxgl-popup');
+    if (popUps[0]) popUps[0].remove();
+  }
+  
+  function flyToStore(currentFeature) {
+    map.flyTo({
+        center: currentFeature.geometry.coordinates,
+        zoom: 17,
+        minZoom: 15
+      });
+  }
+  // Create a popup, but don't add it to the map yet.
+  var popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+  });
+
+  map.on('mouseenter', 'background-posts', function(e) {
+      // Change the cursor style as a UI indicator.
+      map.getCanvas().style.cursor = 'pointer';
+
+      // map.easeTo({center: e.lnglat});
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup.setLngLat(e.features[0].geometry.coordinates)
+          .setHTML('<h3>' + e.features[0].properties['Location'] + '</h3>' + 
+          '<img src="' + e.features[0].properties['ImageLink'] + '" />' + 
+          '<h4>' + e.features[0].properties['Address'] + ' ' + e.features[0].properties['Date'] + ' ' + e.features[0].properties['Time'] + '</h4>')
+          .addTo(map);
+  });
+
+  map.on('mouseleave', 'background-posts', function() {
+      map.getCanvas().style.cursor = '';
+      popup.remove();
+  });
+
+  // map.on('click', removePopUp);
+
+  function createPopUp(currentFeature) {
+    var popUps = document.getElementsByClassName('mapboxgl-popup');
+    if (popUps[0]) popUps[0].remove();
+
+    var popup = new mapboxgl.Popup({closeOnClick: false})
+          .setLngLat(currentFeature.geometry.coordinates)
+          .setHTML('<h3>' + currentFeature.properties['Location'] + '</h3>' + 
+          '<img src="' + currentFeature.properties['ImageLink'] + '" />' + 
+          '<h4>' + currentFeature.properties['Address'] + '</h4>')
+          .addTo(map);
+  }
+ 
+  function buildLocationList(data) {
+    for (i = 0; i < data.features.length; i++) {
+      var currentFeature = data.features[i];
+      var prop = currentFeature.properties;
+      
+      var listings = document.getElementById('listings');
+      var listing = listings.appendChild(document.createElement('div'));
+      listing.className = 'item';
+      listing.id = "listing-" + i;
+      listing.dataPosition = i;
+      
+      var link = listing.appendChild(document.createElement('a'));
+      link.href = '#access_token=' + igToken;
+      link.className = 'title';
+      link.innerHTML = prop['Location'];     
+      
+      var details = listing.appendChild(document.createElement('div'));
+      details.innerHTML = prop['Address'];
+
+      listing.addEventListener('click', function(e){
+        // Update the currentFeature to the store associated with the clicked link
+        var clickedListing = data.features[this.dataPosition];
+        
+        // 1. Fly to the point
+        flyToStore(clickedListing);
+
+        // 2. Close all other popups and display popup for clicked store
+        createPopUp(clickedListing);
+        
+        // 3. Highlight listing in sidebar (and remove highlight for all other listings)
+        var activeItem = document.getElementsByClassName('active');
+
+        if (activeItem[0]) {
+           activeItem[0].classList.remove('active');
+        }
+        this.parentNode.classList.add('active');
+      });
+    }
+  }
+
+  function getInstagrams(lng, lat) {
+    var API_ENDPOINT = 'https://api.instagram.com/v1/media/search?lat=' + lat + '&lng=' + lng + '&distance=50000&scope=public_scope&callback=?&access_token=' + igToken;
+
+    $.getJSON(API_ENDPOINT, function(result, status) {
+
+      if (status !== 'success') return alert('Request to IG failed');
+
+      // remove all markers from the previous call
+      $('.marker').remove();
+
+      for (var i = result.data.length - 1; i >= 0; i--) {
+        lng = parseFloat(result.data[i].location.longitude);
+        lat = parseFloat(result.data[i].location.latitude);
+        result.data[i].lnglat = [lng, lat];
+
+        isInteresting(result.data[i]) ? addToMarker(result.data[i], i) : addToLayer(result.data[i]);
+      }
+
+      function isInteresting(post) {
+        const tagsInteresting = ['dwp', 'designweek', 'designweekpdx'];
+        var interesting = false;
+        // console.log(post.tags);
+        post.tags.forEach(function(tag) {
+          if (tagsInteresting.indexOf(tag) !== -1) interesting = true;
+        });
+        return interesting;
+      };
+
+      function addToMarker(post, i) {
+
+        // create DOM element for the marker
+        var el = document.createElement('div');
+        el.className = 'marker';
+        el.style.backgroundImage = 'url(' + post.images.thumbnail.url + ')';
+        el.data = i;
+
+        // create the marker
+        var markerOffset = Math.random() * 20 + 20;
+
+        var marker = new mapboxgl.Marker(el, {
+            offset: [-markerOffset, -markerOffset]
+          })
+          .setLngLat(post.lnglat)
+          .addTo(map);
+      };
+
+      // function compareStrings(a, b) {
+      //   // Assuming you want case-insensitive comparison
+      //   a = a.toLowerCase();
+      //   b = b.toLowerCase();
+
+      //   return (a < b) ? -1 : (a > b) ? 1 : 0;
+      // }
+
+      // backgroundPosts.features.sort(function(a, b) {
+      //   return compareStrings(a.properties['Location'], b.properties['Location']);
+      // })
+
+
+      function addToLayer(post) {
+        var point = {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "type": "Point",
+            "coordinates": post.lnglat
+          }
+        };
+        // compareStrings();
+        backgroundPosts.features.push(point);
+        // console.log(backgroundPosts.features);
+      }
+
+      $('.marker').mouseover( function() {
+        if (this.data) {
+          showModal(result.data[this.data]);
+        } else {
+          console.log('Post not found.');
+        }
+      })
+
+      $('#modal-bg').click(function() {
+        hideModal();
+      });
+
+      function showModal( post ) {
+        // fly the map
+        map.easeTo({center: post.lnglat});
+
+        // update content
+        var img = 'url(' + post.images.standard_resolution.url + ')';
+        $('#modal-img').css('backgroundImage', img);
+        var txt = '<a href="' + post.link + '" target="_blank">' + post.location.name + '</a> ';
+        txt += post.caption.text ? post.caption.text : '';
+        $('#modal-txt').html(txt);
+
+        // show modal window
+        $('#modal-bg').addClass('bg-darken25')
+         .css('pointer-events', 'auto');
+        $('#modal-window').removeClass('opacity0');
+      }
+
+      function hideModal() {
+        $('#modal-bg').removeClass('bg-darken25')
+         .css('pointer-events', 'none');
+        $('#modal-window').addClass('opacity0');
+      }
+
+    });
+  };
+
+  var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
+
+  function success(pos) {
+    var crd = pos.coords;
+  };
+
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  };
+
+  navigator.geolocation.getCurrentPosition(success, error, options);
+
+
 // Add points on click (if not dragging point)
 map.on('click', function(e){
   if (!isDragging) {
@@ -37472,11 +37749,6 @@ map.on('click', function(e){
       getOptimizedTrip(origin, api_coordinates, updateMapAndSidebar); 
     }    
   }
-});
-
-map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point);
-    document.getElementById('features').innerHTML = JSON.stringify(features, null, 2);
 });
 
 },{"./getOptimizedTrip.js":226,"jquery":24,"mapbox-gl":91}]},{},[227]);
