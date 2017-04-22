@@ -19,11 +19,28 @@
   <link href='main.css' rel='stylesheet' />
 </head>
 <body>
-  <div class='viewport-full relative clip'>
+ <div class='sidebar'>
+    <div class='heading'>
+      <img src='./img/badge-wordmark-reverse.png'>
+  </div>
+  <div id='listings' class='listings'></div>
+  </div>
+
+  <div id='info' class='absolute align-center w-full m12'>
+  </div>
+  <div id='modal-bg' class='relative flex-parent flex-parent--center-main flex-parent--center-cross viewport-full p20 wmax-full'>
+    <div id='modal-window' class='opacity0 flex-child bg-white round relative p12'>
+      <div id='modal-img'></div>
+      <div id='modal-footer' class='my12 txt-truncate'>
+        <div id='icon-instagram' class='inline-block mr12'></div>
+        <p id='modal-txt' class='inline-block align-t'>I am some modal body content.</p>
+      </div>
+    </div>
+  </div>
+  <div class='viewport-full'>
     <!-- Map -->
-    <pre id='features'></pre>
     
-    <div id='map' class='viewport-twothirds viewport-full-ml absolute top left right bottom'></div>
+    <div id='map' class='map viewport-twothirds viewport-full-ml top left right bottom'></div>
 
     <!-- Map Spinner -->
     <div id='map-spinner' class='loading spinner-center none'></div>
@@ -33,11 +50,12 @@
       <!--  Sidebar -->
         <div id='scroll-sidebar' class='relative scroll-auto round-bold'>
           <div id='intro' class='p12'>
-            <div class='fl'>
+            <!-- <div class='fl'>
               <img src="img/beer.svg" alt="flower-delivery" class='flex-child w36'>
-            </div>
-            <p class='ml48 color-white txt-bold txt-s'>Optimize your pub crawl</p>
-            <p class='ml48 color-white color-lighten50 txt-s'>Click on the map to start your crawl!</p>  
+            </div> -->
+            <p class='ml12 color-white txt-bold txt-m'>Make your own green loop!</p>
+            <p class='ml12 color-white color-lighten50 txt-s'>Click on the map to start your loop!</p>
+            <p class='ml12 color-white color-lighten50 txt-s'><a id='refresh' href='#'>Follow @designweekpdx</a></p>
           </div>
           <div id='info'>
           <!-- Spinner -->
@@ -71,6 +89,8 @@
   </div>
 
   <a class='mb-attribution absolute bottom m6' target='_blank' href='https://www.mapbox.com/'></a>
+  <script type="text/javascript" src="backgroundPosts.js"></script>
   <script src='bundle.js'></script>
+
 </body>
 </html>
