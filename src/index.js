@@ -595,7 +595,7 @@ function removePopUp(currentFeature) {
       }
 
       function isInteresting(post) {
-        const tagsInteresting = ['dwp', 'designweek', 'designweekpdx'];
+        const tagsInteresting = ['dwp', 'designweek', 'designweekpdx', 'dwpdx', 'greenlooppdx'];
         var interesting = false;
         // console.log(post.tags);
         post.tags.forEach(function(tag) {
